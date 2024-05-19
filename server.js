@@ -5,11 +5,14 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express'); // Import express module
 const connectToDb = require('./config/connectToDb'); // Import the function to connect to the database
-const notesController = require('./controllers/notesControllers');
 const notesControllers = require("./controllers/notesControllers");
+const path = require('path');
+const favicon = require('serve-favicon');
+const cors = require('cors'); // Add cors package
 
 const app = express(); // Create an instance of express
 
+app.use(cors()); // Use cors middleware
 app.use(express.json()); // Middleware to parse JSON bodies in requests
 
 // Connect to the database
@@ -28,6 +31,11 @@ app.post('/note', notesControllers.createnote );
 app.put('/note/:id', notesControllers.updateNote );
 
 app.delete('/note/:id', notesControllers.deleteNote );
+
+// Route for the root URL
+app.get('/', (req, res) => {
+    res.send('Welcome to the Notes API');
+});
 
 // Start the server on the specified port, defaulting to 3000 if not specified
 const PORT = process.env.PORT || 3000;
